@@ -17,15 +17,15 @@ import java.util.Optional;
 public class OrdrarController {
 
     private final OrdrarRepository ordrarRepo;
-    private final KundRepository kundRepo;
+    //    private final KundRepository kundRepo;  // TODO
     private final VarorRepository varorRepo;
 
     private final static Logger log = LoggerFactory.getLogger(OrdrarController.class);
 
-    OrdrarController(OrdrarRepository ordrarRepo, KundRepository kundRepo,
+    OrdrarController(OrdrarRepository ordrarRepo/*, KundRepository kundRepo*/,
                      VarorRepository varorRepo) {
         this.ordrarRepo = ordrarRepo;
-        this.kundRepo = kundRepo;
+//        this.kundRepo = kundRepo;
         this.varorRepo = varorRepo;
     }
 
@@ -41,7 +41,7 @@ public class OrdrarController {
         return ordrarRepo.findById(id).orElse(null);
     }
 
-    @RequestMapping("/ordar/add/{customerId}/{itemId}")
+    /*@RequestMapping("/ordar/add/{customerId}/{itemId}")
     public Ordrar addNewOrder(@PathVariable Long customerId, @PathVariable Long itemId) {
         log.info("Adding a new order");
         Kund k = kundRepo.findById(customerId).orElse(null);
@@ -49,9 +49,8 @@ public class OrdrarController {
             Ordrar newOrdrar = new Ordrar(LocalDateTime.now(), );
             ordrarRepo.save(newOrdrar);
             return newOrdrar;
-        }
-        else {
+        } else {
             return null;
         }
-    }
+    }*/
 }

@@ -18,17 +18,18 @@ public class Ordrar {
 
     private LocalDateTime createdDate;
 
-    @ManyToOne
-    private Kund customer;
+    /*@ManyToOne
+    private Kund customer;*/
 
     @ManyToMany
     @JoinTable
     private List<Varor> products;
 
-    public Ordrar(LocalDateTime createdDate, Kund customer, Varor item) {
+    public Ordrar(LocalDateTime createdDate/*, Kund customer,*/, Varor item) {
         this.createdDate = createdDate;
-        this.customer = customer;
+//        this.customer = customer;
         products.add(item);
     }
+    // TODO
 
 }
