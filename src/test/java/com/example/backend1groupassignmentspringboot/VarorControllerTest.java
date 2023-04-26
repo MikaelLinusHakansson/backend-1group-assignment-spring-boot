@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 import java.util.List;
@@ -82,30 +83,30 @@ public class VarorControllerTest {
         // Expected result in JSON
     }
 
+
     @Test
     public void addVarorWithBody() throws Exception {
         // Create a new Varor object
         Varor vara = new Varor();
         vara.setName("TestVara");
         vara.setPrice(100);
+        vara.setId(4L);
 
         // Convert the Varor object to JSON
         ObjectMapper objectMapper = new ObjectMapper();
         String varaJson = objectMapper.writeValueAsString(vara);
 
         // Perform a POST request to the /items endpoint with the Varor object as the request body
-        MvcResult result = mockMvc.perform(post("/items")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/items")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(varaJson))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        // Convert the response to a Varor object
-        String responseString = result.getResponse().getContentAsString();
-        Varor responseVara = objectMapper.readValue(responseString, Varor.class);
+        // Get the response body as a string
+        String responseBody = result.getResponse().getContentAsString();
 
-        // Assert that the response Varor object has the same name and price as the original Varor object
-        assertEquals(vara.getName(), responseVara.getName());
-        assertEquals(vara.getPrice(), responseVara.getPrice());
+        // Assert that the response body contains the expected message
+        assertEquals("The request was ok and saved successfully: " + vara, responseBody);
     }
 }
