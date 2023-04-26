@@ -1,4 +1,4 @@
-package com.example.backend1groupassignmentspringboot.controller;
+package com.example.backend1groupassignmentspringboot.restcontroller;
 
 
 import com.example.backend1groupassignmentspringboot.dao.VarorRepository;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class VarorController {
+public class VarorRestController {
     private final VarorRepository varorRepository;
-    private final static Logger log = LoggerFactory.getLogger(VarorController.class);
+    private final static Logger log = LoggerFactory.getLogger(VarorRestController.class);
 
-    public VarorController(VarorRepository varorRepository) {
+    public VarorRestController(VarorRepository varorRepository) {
         this.varorRepository = varorRepository;
     }
 
