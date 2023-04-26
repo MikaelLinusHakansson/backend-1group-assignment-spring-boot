@@ -5,6 +5,7 @@ import com.example.backend1groupassignmentspringboot.dao.VarorRepository;
 import com.example.backend1groupassignmentspringboot.entity.Varor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class VarorController {
     }
 
     @RequestMapping("/varor/add/{name}/{price}")
-    public Varor post(@PathVariable String name, @PathVariable double price){
+    public Varor post(@PathVariable String name, @PathVariable double price) {
         log.info("Adding a new item");
         Varor newVara = new Varor(name, price);
         varorRepository.save(newVara);
@@ -39,9 +40,13 @@ public class VarorController {
     }
 
     @PostMapping("/items")
-    public Varor addVaror(@RequestBody Varor vara) {
+    public ResponseEntity<?> addVaror(@RequestBody Varor vara) {
+        if (vara == null) {
+            return ResponseEntity.badRequest().body("Body can't be null");
+        } else if (vara.getName() == null || vara.getPrice() < 0) {
+            return ResponseEntity.badRequest().body("All fields of the body must be present and price must be higher than 0");
+        }
         varorRepository.save(vara);
-        return vara;
+        return ResponseEntity.ok().body("The request was ok and saved successfully: " + vara);
     }
-
 }
