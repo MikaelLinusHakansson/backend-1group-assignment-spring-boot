@@ -10,12 +10,12 @@ import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService{
+    @Autowired
     CustomerRepository customerRepository;
 
-    @Autowired
-    public CustomerServiceImpl(CustomerRepository ordrarRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
 
-        this.customerRepository = ordrarRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override

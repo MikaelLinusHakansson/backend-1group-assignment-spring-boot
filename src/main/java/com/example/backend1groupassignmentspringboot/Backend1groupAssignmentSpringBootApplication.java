@@ -71,9 +71,28 @@ public class Backend1groupAssignmentSpringBootApplication {
             listOfWares3.add(vara8);
             listOfWares3.add(vara9);
 
-            Ordrar order1 = new Ordrar(listOfWares, customer1);
-            Ordrar order2 = new Ordrar(listOfWares2, customer2);
-            Ordrar order3 = new Ordrar(listOfWares3, customer3);
+            Ordrar order1 = new Ordrar();
+            order1.setCustomer(customer1);
+            Ordrar order2 = new Ordrar();
+            order2.setCustomer(customer2);
+
+
+            Ordrar order3 = new Ordrar();
+            order3.setCustomer(customer3);
+
+            order1.addItem(vara1);
+            order1.addItem(vara2);
+            order1.addItem(vara3);
+
+            order2.addItem(vara4);
+            order2.addItem(vara5);
+            order2.addItem(vara6);
+
+            order3.addItem(vara7);
+            order3.addItem(vara8);
+            order3.addItem(vara9);
+
+
             ordrarRepository.save(order1);
             ordrarRepository.save(order2);
             ordrarRepository.save(order3);

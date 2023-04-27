@@ -1,5 +1,7 @@
 package com.example.backend1groupassignmentspringboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,11 +22,11 @@ public class Customer {
     private String name;
     private String personalNumber;
 
-    @OneToMany
-    @JoinColumn
-    private List<Ordrar> orders;
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private Ordrar orders;
 
-    public Customer(String name, String personalNumber, List<Ordrar> orders) {
+    public Customer(String name, String personalNumber, Ordrar orders) {
         this.name = name;
         this.personalNumber = personalNumber;
         this.orders = orders;

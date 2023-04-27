@@ -1,10 +1,15 @@
 package com.example.backend1groupassignmentspringboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -30,16 +35,12 @@ public class Ordrar {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-    /*@ManyToOne
-    private Kund customer;*/
 
-    @OneToMany
-    @JoinColumn
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private List<Varor> products = new ArrayList<>();
 
     @OneToOne
-    @JoinColumn
-    public Customer customer;
+    private Customer customer;
 
 
     public Ordrar(LocalDateTime createdDate, List<Varor> products) {
@@ -49,6 +50,8 @@ public class Ordrar {
             this.products.addAll(products);
         }
     }
+
+
 
 
 

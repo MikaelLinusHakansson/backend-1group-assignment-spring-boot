@@ -74,9 +74,9 @@ public class VarorControllerTest {
     void getAll() throws Exception {
         mockMvc.perform(get("/varor"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"id\":1, \"name\": \"Kaffe\", \"price\": 200,\"order\": null}," +
-                        "{\"id\":2, \"name\": \"Skor\", \"price\": 199.99,\"order\": null}," +
-                        "{\"id\":3, \"name\": \"Strumpor\", \"price\": 20.99,\"order\": null}]"));
+                .andExpect(content().json("[{\"id\":1, \"name\": \"Kaffe\", \"price\": 200}," +
+                        "{\"id\":2, \"name\": \"Skor\", \"price\": 199.99}," +
+                        "{\"id\":3, \"name\": \"Strumpor\", \"price\": 20.99}]"));
 
     }
 

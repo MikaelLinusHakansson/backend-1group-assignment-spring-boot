@@ -1,7 +1,9 @@
 package com.example.backend1groupassignmentspringboot.restcontroller;
 
+import com.example.backend1groupassignmentspringboot.dao.CustomerRepository;
 import com.example.backend1groupassignmentspringboot.dao.OrdrarRepository;
 import com.example.backend1groupassignmentspringboot.dao.VarorRepository;
+import com.example.backend1groupassignmentspringboot.entity.Customer;
 import com.example.backend1groupassignmentspringboot.entity.Ordrar;
 import com.example.backend1groupassignmentspringboot.entity.Varor;
 import org.slf4j.Logger;
@@ -16,16 +18,16 @@ import java.util.List;
 public class OrdrarRestController {
 
     private final OrdrarRepository ordrarRepo;
-    //    private final KundRepository kundRepo;  // TODO
     private final VarorRepository varorRepo;
+    private final CustomerRepository customerRepository;
 
     private final static Logger log = LoggerFactory.getLogger(OrdrarRestController.class);
 
-    OrdrarRestController(OrdrarRepository ordrarRepo/*, KundRepository kundRepo*/,
-                         VarorRepository varorRepo) {
+    OrdrarRestController(OrdrarRepository ordrarRepo,
+                         VarorRepository varorRepo, CustomerRepository customerRepository) {
         this.ordrarRepo = ordrarRepo;
-//        this.kundRepo = kundRepo;
         this.varorRepo = varorRepo;
+        this.customerRepository = customerRepository;
     }
 
     @RequestMapping("/ordrar")
@@ -40,12 +42,15 @@ public class OrdrarRestController {
         return ordrarRepo.findById(id).orElse(null);
     }
 
-    @RequestMapping("/ordrar/add/{itemId}")
-    public Ordrar addNewOrder(@PathVariable Long itemId) {
+    @RequestMapping("/ordrar/add/{itemId}/{customerId}")
+    public Ordrar addNewOrder(@PathVariable Long itemId, @PathVariable Long customerId) {
         log.info("Adding a new order");
         Varor tempVaror = varorRepo.findById(itemId).get();
+        Customer tempCustomer = customerRepository.findById(customerId).get();
         Ordrar newOrdrar = new Ordrar();
         newOrdrar.setProducts(tempVaror);
+        newOrdrar.setCustomer(tempCustomer);
+
         ordrarRepo.save(newOrdrar);
         return newOrdrar;
     }

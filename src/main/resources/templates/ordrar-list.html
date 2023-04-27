@@ -35,6 +35,7 @@
         </thead>
 
         <tbody>
+
         <tr th:each="tempOrder : ${ordrar}">
             <td th:text="${tempOrder.getId()}"/>
             <td th:text="${tempOrder.getCustomer().getId()}"/>
@@ -42,9 +43,12 @@
             <td th:text="${#temporals.format(tempOrder.getLastModifiedDate(), 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
                 <ul>
-                    <li th:each="item : ${tempOrder.products}" th:text="${item.name} + ' (' + ${item.price} + ')'" />
+                    <li th:each="item : ${tempOrder.products}">
+                        <span th:text="${item.name} + ' (' + ${item.price} + ')'"></span>
+                    </li>
                 </ul>
             </td>
+
 
             <td>
                 <a th:href="@{/ordrar/thymeleaf/showFormForUpdate(orderId=${tempOrder.id})}"

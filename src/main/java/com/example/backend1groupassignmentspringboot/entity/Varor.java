@@ -1,10 +1,13 @@
 package com.example.backend1groupassignmentspringboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -17,7 +20,9 @@ public class Varor {
     private String name;
     private double price;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn
+    @JsonIgnore
     private Ordrar order;
 
     public Varor(String name, double price) {
@@ -34,4 +39,8 @@ public class Varor {
     public void setOrder(Ordrar order){
         this.order = order;
     }
+
+
+
+
 }
