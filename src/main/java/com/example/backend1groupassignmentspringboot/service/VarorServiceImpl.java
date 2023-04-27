@@ -33,7 +33,7 @@ public class VarorServiceImpl implements VarorService{
         }
         else {
             // we didn't find the employee
-            throw new RuntimeException("Did not find employee id - " + id);
+            throw new RuntimeException("Did not find order id - " + id);
         }
 
         return theVara;

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <title>Ordrar Directory</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>Ordrar Directory</h3>
+    <hr>
+    <a th:href="@{/ordrar/thymeleaf/showFormForAdd}" class="btn btn-primary btn-sm mb-3">
+        Add Order
+    </a>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Order ID</th>
+            <th>Customer ID</th>
+            <th>Created Date</th>
+            <th>Last Updated</th>
+            <th>Items</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="tempOrder : ${ordrar}">
+            <td th:text="${tempOrder.getId()}"/>
+            <td th:text="${tempOrder.getCustomer().getId()}"/>
+            <td th:text="${#temporals.format(tempOrder.getCreatedDate(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${#temporals.format(tempOrder.getLastModifiedDate(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <ul>
+                    <li th:each="item : ${tempOrder.products}" th:text="${item.name} + ' (' + ${item.price} + ')'" />
+                </ul>
+            </td>
+
+            <td>
+                <a th:href="@{/ordrar/thymeleaf/showFormForUpdate(orderId=${tempOrder.id})}"
+                   class="btn btn-info btn-sm">
+                    Update
+                </a>
+
+                <a th:href="@{/ordrar/thymeleaf/delete(orderId=${tempOrder.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="if (!(confirm('Are you sure you want to delete this order?'))) return false">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

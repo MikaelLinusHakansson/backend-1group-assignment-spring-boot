@@ -1,56 +1,87 @@
 package com.example.backend1groupassignmentspringboot.controller;
 
-import com.example.backend1groupassignmentspringboot.dao.OrdrarRepository;
-import com.example.backend1groupassignmentspringboot.dao.VarorRepository;
+import com.example.backend1groupassignmentspringboot.entity.Customer;
 import com.example.backend1groupassignmentspringboot.entity.Ordrar;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.backend1groupassignmentspringboot.entity.Varor;
+import com.example.backend1groupassignmentspringboot.service.CustomerService;
+import com.example.backend1groupassignmentspringboot.service.OrdrarService;
+import com.example.backend1groupassignmentspringboot.service.VarorService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-@RestController
+@Controller
+@RequestMapping("/ordrar/thymeleaf")
 public class OrdrarController {
+    private final OrdrarService ordrarService;
+    private final VarorService varorService;
+    private final CustomerService customerService;
 
-    private final OrdrarRepository ordrarRepo;
-    //    private final KundRepository kundRepo;  // TODO
-    private final VarorRepository varorRepo;
 
-    private final static Logger log = LoggerFactory.getLogger(OrdrarController.class);
-
-    OrdrarController(OrdrarRepository ordrarRepo/*, KundRepository kundRepo*/,
-                     VarorRepository varorRepo) {
-        this.ordrarRepo = ordrarRepo;
-//        this.kundRepo = kundRepo;
-        this.varorRepo = varorRepo;
+    public OrdrarController(OrdrarService ordrarService, VarorService varorService, CustomerService customerService) {
+        this.ordrarService = ordrarService;
+        this.varorService = varorService;
+        this.customerService = customerService;
     }
 
-    @RequestMapping("/ordrar")
-    public List<Ordrar> getAllOrdrar() {
-        log.info("Successfully returned all the orders");
-        return ordrarRepo.findAll();
+    @GetMapping("/list")
+    public String listOrdrar(Model model) {
+        List<Ordrar> theOrders = ordrarService.findAll();
+        model.addAttribute("ordrar", theOrders);
+        return "ordrar-list";
     }
 
-    @RequestMapping("/ordrar/{id}")
-    public Ordrar getOrdrarById(@PathVariable Long id) {
-        log.info("Fetching one order");
-        return ordrarRepo.findById(id).orElse(null);
+    @GetMapping("/showFormForAdd")
+    public String showFormForAdd(Model theModel) {
+        Ordrar theOrdrar = new Ordrar();
+        theModel.addAttribute("ordrar", theOrdrar);
+        return "ordrar-form";
     }
 
-    /*@RequestMapping("/ordar/add/{customerId}/{itemId}")
-    public Ordrar addNewOrder(@PathVariable Long customerId, @PathVariable Long itemId) {
-        log.info("Adding a new order");
-        Kund k = kundRepo.findById(customerId).orElse(null);
-        if (k != null) {
-            Ordrar newOrdrar = new Ordrar(LocalDateTime.now(), );
-            ordrarRepo.save(newOrdrar);
-            return newOrdrar;
-        } else {
-            return null;
+
+    @GetMapping("/showFormForUpdate")
+    public String showFormForUpdate(@RequestParam("orderId") Long id, Model theModel) {
+        Ordrar theOrder = ordrarService.findById(id);
+        if (theOrder == null) {
+            throw new RuntimeException("Ordrar id not found: " + id);
         }
-    }*/
+        theModel.addAttribute("ordrar", theOrder);
+        return "ordrar-form";
+    }
+
+
+    @GetMapping("/delete")
+    public String delete(@RequestParam("orderId") Long theId) {
+        ordrarService.deleteById(theId);
+        return "redirect:/ordrar/thymeleaf/list";
+    }
+
+    @PostMapping("/save")
+    public String saveOrder(@ModelAttribute("ordrar") Ordrar theOrdrar,
+                            @RequestParam("customerName") String customerName,
+                            @RequestParam("personalNumber") String personalNumber,
+                            @RequestParam("name") String productName,
+                            @RequestParam("price") Double productPrice) {
+
+        // Create a new Customer and save to the database
+        Customer theCustomer = new Customer();
+        theCustomer.setName(customerName);
+        theCustomer.setPersonalNumber(personalNumber);
+        customerService.save(theCustomer);
+
+        // Create a new Product and save to the database
+        Varor theProduct = new Varor();
+        theProduct.setName(productName);
+        theProduct.setPrice(productPrice);
+        varorService.save(theProduct);
+
+        // Add the Customer and Product to the Order and save to the database
+        theOrdrar.setCustomer(theCustomer);
+        theOrdrar.setProducts(theProduct);
+        ordrarService.save(theOrdrar);
+
+        return "redirect:/ordrar/thymeleaf/list";
+    }
 }

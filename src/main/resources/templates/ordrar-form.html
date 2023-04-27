@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <title>New Order</title>
+</head>
+
+<body>
+<div class="container">
+    <h3>New Order</h3>
+    <hr>
+    <form action="#" th:action="@{/ordrar/thymeleaf/save}" method="POST">
+        <div class="form-group">
+            <label for="customerName">Customer Name</label>
+            <input type="text" name="customerName" class="form-control" id="customerName" placeholder="Customer Name">
+        </div>
+        <div class="form-group">
+            <label for="personalNumber">Personal Number</label>
+            <input type="text" name="personalNumber" class="form-control" id="personalNumber" placeholder="Personal Number">
+        </div>
+        <div class="form-group">
+            <label for="productName">Product Name</label>
+            <input type="text" name="name" class="form-control" id="productName" placeholder="Product Name">
+        </div>
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" name="price" class="form-control" id="price" placeholder="Price">
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+<hr>
+<a th:href="@{/ordrar/thymeleaf/list}">Back to Order List</a>
+</body>
+
+</html>

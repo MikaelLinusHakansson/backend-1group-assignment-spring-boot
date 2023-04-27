@@ -32,11 +32,11 @@ public class VarorRestController {
     }
 
     @RequestMapping("/varor/add/{name}/{price}")
-    public Varor post(@PathVariable String name, @PathVariable double price) {
+    public String post(@PathVariable String name, @PathVariable double price) {
         log.info("Adding a new item");
         Varor newVara = new Varor(name, price);
         varorRepository.save(newVara);
-        return newVara;
+        return "Ny vara lades till " + newVara.getName();
     }
 
     @PostMapping("/items")
@@ -49,4 +49,5 @@ public class VarorRestController {
         varorRepository.save(vara);
         return ResponseEntity.ok().body("The request was ok and saved successfully: " + vara);
     }
+
 }

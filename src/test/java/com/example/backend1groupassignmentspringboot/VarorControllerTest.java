@@ -1,5 +1,8 @@
 package com.example.backend1groupassignmentspringboot;
 
+import com.example.backend1groupassignmentspringboot.dao.OrdrarRepository;
+import com.example.backend1groupassignmentspringboot.dao.VarorRepository;
+import com.example.backend1groupassignmentspringboot.entity.Ordrar;
 import com.example.backend1groupassignmentspringboot.entity.Varor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,72 +18,77 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class VarorControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
 
     @MockBean
-    private JpaRepository<Varor, Long> mockRepo;
+    private OrdrarRepository ordrarLongJpaRepository;
+
+    @MockBean
+    private VarorRepository varorRepository;
 
 
     @BeforeEach
     public void init() {
-        Varor vara1 = new Varor(1L, "Kaffe", 200);
-        Varor vara2 = new Varor(2L, "Skor", 199.99);
-        Varor vara3 = new Varor(3L, "Strumpor", 20.99);
+        Varor vara1 = new Varor(1L, "Kaffe", 200, null);
+        Varor vara2 = new Varor(2L, "Skor", 199.99, null);
+        Varor vara3 = new Varor(3L, "Strumpor", 20.99, null);
 
-        when(mockRepo.findById(1L)).thenReturn(Optional.of(vara1));
-        when(mockRepo.findById(2L)).thenReturn(Optional.of(vara2));
-        when(mockRepo.findById(3L)).thenReturn(Optional.of(vara3));
 
-        when(mockRepo.findAll()).thenReturn(Arrays.asList(vara1, vara2, vara3));
+        when(varorRepository.findById(1L)).thenReturn(Optional.of(vara1));
+        when(varorRepository.findById(2L)).thenReturn(Optional.of(vara2));
+        when(varorRepository.findById(3L)).thenReturn(Optional.of(vara3));
 
-        Optional<Varor> varor = mockRepo.findById(1L);
-        varor.ifPresent(value -> System.out.println(value.getName()));
-
-        List<Varor> kategoris = mockRepo.findAll();
-        kategoris.forEach(s -> System.out.println(s.getName() + s.getPrice() + s.getId()));
+        when(varorRepository.findAll()).thenReturn(Arrays.asList(vara1, vara2, vara3));
+        when(varorRepository.save(vara1)).thenReturn(vara1);
 
     }
 
     @Test
-    void addVaraWithParams() throws Exception {
-        // Create two new variables "name" and "price".
-        String name = "Nokia 3310";
-        double price = 100.0;
-        // Perform a POST request to the url
-        mockMvc.perform(post("/varor/add/{name}/{price}", name, price))
-                .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":4,\"name\":\"Nokia 3310\",\"price\":100.0}"));
-        // Expected results
+    void getVaraById() throws Exception {
+        Varor vara1 = new Varor(1L, "Kaffe", 200, null);
+        // Save the order
+        Varor savedVara = varorRepository.save(vara1);
+        assertEquals(1L, savedVara.getId());
 
-        System.out.println(mockRepo.findAll());
     }
-
 
     @Test
     void getAll() throws Exception {
-        // Perform a GET request to the url
         mockMvc.perform(get("/varor"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[" +
-                        "{\"id\":1,\"name\":\"Kaffe\", \"price\": 200}," +
-                        "{\"id\":2,\"name\":\"Skor\", \"price\": 199.99}," +
-                        "{\"id\":3,\"name\":\"Strumpor\", \"price\": 20.99}]"));
-        // Expected result in JSON
+                .andExpect(content().json("[{\"id\":1, \"name\": \"Kaffe\", \"price\": 200,\"order\": null}," +
+                        "{\"id\":2, \"name\": \"Skor\", \"price\": 199.99,\"order\": null}," +
+                        "{\"id\":3, \"name\": \"Strumpor\", \"price\": 20.99,\"order\": null}]"));
+
+    }
+
+
+    @Test
+    void addVaraWithParams() throws Exception {
+        String name = "Nokia 3310";
+        double price = 100.0;
+        this.mockMvc.perform(get("/varor/add/{name}/{price}", name, price))
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo("Ny vara lades till " + name)));
+
     }
 
 
@@ -109,4 +117,21 @@ public class VarorControllerTest {
         // Assert that the response body contains the expected message
         assertEquals("The request was ok and saved successfully: " + vara, responseBody);
     }
+
+    @Test
+    void addNewVara() throws Exception {
+        Varor varor = new Varor("item1", 10.0);
+        varorRepository.save(varor);
+
+        Ordrar ordrar = new Ordrar();
+        ordrar.addVaror(varor);
+
+        when(ordrarLongJpaRepository.save(any(Ordrar.class))).thenReturn(ordrar);
+
+        Ordrar actualOrdrar = ordrarLongJpaRepository.save(ordrar);
+
+        verify(ordrarLongJpaRepository, times(1)).save(actualOrdrar);
+        assertEquals(ordrar, actualOrdrar);
+    }
+
 }
