@@ -33,7 +33,6 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 public class OrderControllerTest {
@@ -47,13 +46,29 @@ public class OrderControllerTest {
     private VarorRepository varorRepository;
 
 
-
     @BeforeEach
     public void init() {
+        Varor vara1 = new Varor(1L, "vara1", 200);
+        Varor vara2 = new Varor(2L, "vara2", 200);
+        Varor vara3 = new Varor(3L, "vara3", 200);
 
-        Ordrar order1 = new Ordrar(1L, null,null, null, null);
-        Ordrar order2 = new Ordrar(2L, null, null, null, null);
-        Ordrar order3 = new Ordrar(3L, null, null, null, null);
+        List<Varor> varorList1 = new ArrayList<>();
+        varorList1.add(vara1);
+
+        List<Varor> varorList2 = new ArrayList<>();
+        varorList2.add(vara2);
+
+        List<Varor> varorList3 = new ArrayList<>();
+        varorList3.add(vara3);
+
+        Customer customer1 = new Customer("customer1", "111");
+        Customer customer2 = new Customer("customer2", "222");
+        Customer customer3 = new Customer("customer3", "333");
+
+
+        Ordrar order1 = new Ordrar(1L, null, null, varorList1, customer1);
+        Ordrar order2 = new Ordrar(2L, null, null, varorList2, customer2);
+        Ordrar order3 = new Ordrar(3L, null, null, varorList3, customer3);
 
         when(ordrarLongJpaRepository.findById(1L)).thenReturn(Optional.of(order1));
         when(ordrarLongJpaRepository.findById(2L)).thenReturn(Optional.of(order2));
@@ -75,13 +90,21 @@ public class OrderControllerTest {
     void getAll() throws Exception {
         mockMvc.perform(get("/ordrar"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"id\":1, \"createdDate\": null, \"lastModifiedDate\": null,\"products\": null, \"customer\": null}," +
-                        "{\"id\":2, \"createdDate\": null, \"lastModifiedDate\": null,\"products\": null, \"customer\": null}," +
-                        "{\"id\":3, \"createdDate\": null, \"lastModifiedDate\": null,\"products\": null, \"customer\": null}]"));
+                .andExpect(content().json("[" +
+                        "{\"id\":1, \"createdDate\": null, \"lastModifiedDate\": null, \"products\": " +
+                        "[{\"id\":1, \"name\":\"vara1\", \"price\":200.0}], \"customer\": " +
+                        "{\"name\":\"customer1\", \"personalNumber\":\"111\"}}," +
+                        "{\"id\":2, \"createdDate\": null, \"lastModifiedDate\": null, \"products\": " +
+                        "[{\"id\":2, \"name\":\"vara2\", \"price\":200.0}], \"customer\": " +
+                        "{\"name\":\"customer2\", \"personalNumber\":\"222\"}}," +
+                        "{\"id\":3, \"createdDate\": null, \"lastModifiedDate\": null, \"products\": " +
+                        "[{\"id\":3, \"name\":\"vara3\", \"price\":200.0}], \"customer\": " +
+                        "{\"name\":\"customer3\", \"personalNumber\":\"333\"}}]"));
+
     }
 
     @Test
-    void getByOrderId(){
+    void getByOrderId() {
         LocalDateTime now = LocalDateTime.now();
         Ordrar order = new Ordrar(1L, now, now, null, null);
 
@@ -105,7 +128,7 @@ public class OrderControllerTest {
     }
 
     @Test
-    void addNewOrder(){
+    void addNewOrder() {
         Varor varor = new Varor("item1", 10.0);
         varorRepository.save(varor);
 

@@ -20,23 +20,9 @@ public class Varor {
     private String name;
     private double price;
 
-    /*@ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private Ordrar order;*/
-
     public Varor(String name, double price) {
         this.name = name;
         this.price = price;
     }
-
-
-
-    public void setOrder(Ordrar order){
-//        this.order = order;
-    }
-
-
-
 
 }

@@ -49,11 +49,7 @@ public class Ordrar {
     }
 
 
-
-
-
-
-    public void setCustomer(Customer customer){
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
@@ -62,7 +58,7 @@ public class Ordrar {
         this.id = id;
     }
 
-    public void addItem(Varor item){
+    public void addItem(Varor item) {
         products.add(item);
     }
 
@@ -71,7 +67,6 @@ public class Ordrar {
             this.products = new ArrayList<>();
         }
         this.products.add(theVaror);
-        theVaror.setOrder(this);
     }
 
     public List<Varor> getProducts() {

@@ -66,39 +66,6 @@ public class OrdrarController {
         return "redirect:/ordrar/thymeleaf/list";
     }
 
-    /*@PostMapping("/save")
-    public String saveOrder(@ModelAttribute("ordrar") Ordrar theOrdrar,
-                            @RequestParam("customerName") String customerName,
-                            @RequestParam("personalNumber") String personalNumber,
-                            @RequestParam("name") String productName,
-                            @RequestParam("price") Double productPrice,
-                            RedirectAttributes redirectAttributes) {
-
-        try {
-            // Create a new Customer and save to the database
-            Customer theCustomer = new Customer();
-            theCustomer.setName(customerName);
-            theCustomer.setPersonalNumber(personalNumber);
-            customerService.save(theCustomer);
-
-            // Create a new Product and save to the database
-            Varor theProduct = new Varor();
-            theProduct.setName(productName);
-            theProduct.setPrice(productPrice);
-            varorService.save(theProduct);
-
-            // Add the Customer and Product to the Order and save to the database
-            theOrdrar.setCustomer(theCustomer);
-            theOrdrar.setProducts(theProduct);
-            ordrarService.save(theOrdrar);
-
-            return "redirect:/ordrar/thymeleaf/list";
-        } catch (DataIntegrityViolationException e) {
-            // Handle duplicate entry errors
-            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while saving the order. The same product cannot be linked to two different people.");
-            return "redirect:/ordrar/thymeleaf/showFormForAdd";
-        }
-    }*/
     @PostMapping("/save")
     public String saveOrder(@ModelAttribute("ordrar") Ordrar theOrdrar,
                             @RequestParam("customerId") Long customerId,
