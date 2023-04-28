@@ -90,7 +90,7 @@ public class CustomerControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String customerJson = objectMapper.writeValueAsString(customer);
 
-        MvcResult result =  mockMvc.perform(MockMvcRequestBuilders.post("/customer")
+        MvcResult result =  mockMvc.perform(MockMvcRequestBuilders.post("/customer/save/body")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(customerJson))
                 .andExpect(status().isOk())

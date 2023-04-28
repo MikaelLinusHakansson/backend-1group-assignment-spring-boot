@@ -47,9 +47,9 @@ public class VarorControllerTest {
 
     @BeforeEach
     public void init() {
-        Varor vara1 = new Varor(1L, "Kaffe", 200, null);
-        Varor vara2 = new Varor(2L, "Skor", 199.99, null);
-        Varor vara3 = new Varor(3L, "Strumpor", 20.99, null);
+        Varor vara1 = new Varor(1L, "Kaffe", 200);
+        Varor vara2 = new Varor(2L, "Skor", 199.99);
+        Varor vara3 = new Varor(3L, "Strumpor", 20.99);
 
 
         when(varorRepository.findById(1L)).thenReturn(Optional.of(vara1));
@@ -63,7 +63,7 @@ public class VarorControllerTest {
 
     @Test
     void getVaraById() throws Exception {
-        Varor vara1 = new Varor(1L, "Kaffe", 200, null);
+        Varor vara1 = new Varor(1L, "Kaffe", 200);
         // Save the order
         Varor savedVara = varorRepository.save(vara1);
         assertEquals(1L, savedVara.getId());

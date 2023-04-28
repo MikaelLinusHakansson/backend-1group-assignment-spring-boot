@@ -66,7 +66,7 @@ public class OrdrarController {
         return "redirect:/ordrar/thymeleaf/list";
     }
 
-    @PostMapping("/save")
+    /*@PostMapping("/save")
     public String saveOrder(@ModelAttribute("ordrar") Ordrar theOrdrar,
                             @RequestParam("customerName") String customerName,
                             @RequestParam("personalNumber") String personalNumber,
@@ -96,6 +96,34 @@ public class OrdrarController {
         } catch (DataIntegrityViolationException e) {
             // Handle duplicate entry errors
             redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while saving the order. The same product cannot be linked to two different people.");
+            return "redirect:/ordrar/thymeleaf/showFormForAdd";
+        }
+    }*/
+    @PostMapping("/save")
+    public String saveOrder(@ModelAttribute("ordrar") Ordrar theOrdrar,
+                            @RequestParam("customerId") Long customerId,
+                            @RequestParam("productId") Long productId,
+                            RedirectAttributes redirectAttributes) {
+
+        try {
+            // Get the customer from the database using the provided customer ID
+            Customer theCustomer = customerService.findById(customerId);
+
+            // Get the product from the database using the provided product ID
+            Varor theProduct = varorService.findById(productId);
+
+            // Add the Customer and Product to the Order and save to the database
+            theOrdrar.setCustomer(theCustomer);
+            theOrdrar.setProducts(theProduct);
+            ordrarService.save(theOrdrar);
+
+            return "redirect:/ordrar/thymeleaf/list";
+        } catch (DataIntegrityViolationException e) {
+            // Handle duplicate entry errors
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "An error occurred while saving the order. " +
+                            "The same product cannot be linked to two different people.");
             return "redirect:/ordrar/thymeleaf/showFormForAdd";
         }
     }

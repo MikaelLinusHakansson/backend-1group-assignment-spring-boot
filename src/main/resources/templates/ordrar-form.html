@@ -19,23 +19,20 @@
     <hr>
     <form action="#" th:action="@{/ordrar/thymeleaf/save}" method="POST">
         <div class="form-group">
-            <label for="customerName">Customer Name</label>
-            <input type="text" name="customerName" class="form-control" id="customerName" placeholder="Customer Name">
+            <label for="customerId">Customer ID</label>
+            <input type="number" name="customerId" class="form-control" id="customerId" placeholder="Customer ID">
         </div>
         <div class="form-group">
-            <label for="personalNumber">Personal Number</label>
-            <input type="text" name="personalNumber" class="form-control" id="personalNumber" placeholder="Personal Number">
+            <label for="productId">Product ID</label>
+            <input type="number" name="productId" class="form-control" id="productId" placeholder="Product ID">
         </div>
-        <div class="form-group">
-            <label for="productName">Product Name</label>
-            <input type="text" name="name" class="form-control" id="productName" placeholder="Product Name">
-        </div>
-        <div class="form-group">
+        <!--<div class="form-group">
             <label for="price">Price</label>
             <input type="number" name="price" class="form-control" id="price" placeholder="Price">
-        </div>
+        </div>-->
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
+
 </div>
 <hr>
 <a th:href="@{/ordrar/thymeleaf/list}">Back to Order List</a>

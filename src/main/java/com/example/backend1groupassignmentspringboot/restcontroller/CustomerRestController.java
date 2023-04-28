@@ -30,14 +30,14 @@ public class CustomerRestController {
     }
 
     @RequestMapping("/customer/add/{name}/{personalNumber}")
-    public Customer post(@PathVariable String name, @PathVariable String personalNumber) {
+    public String post(@PathVariable String name, @PathVariable String personalNumber) {
         log.info("Adding a new customer");
         Customer newCustomer = new Customer(name, personalNumber);
         customerRepository.save(newCustomer);
-        return newCustomer;
+        return "Ny kund lades till " + name;
     }
 
-    @PostMapping("/customer")
+    @PostMapping("/customer/save/body")
     public ResponseEntity<?> addCustomer(@RequestBody Customer customer) {
         if (customer == null) {
             return ResponseEntity.badRequest().body("Body can't be null");

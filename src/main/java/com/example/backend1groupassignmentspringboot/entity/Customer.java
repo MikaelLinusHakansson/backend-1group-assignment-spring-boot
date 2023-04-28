@@ -22,11 +22,11 @@ public class Customer {
     private String name;
     private String personalNumber;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
     @JsonIgnore
-    private Ordrar orders;
+    private List<Ordrar> orders;
 
-    public Customer(String name, String personalNumber, Ordrar orders) {
+    public Customer(String name, String personalNumber, List<Ordrar> orders) {
         this.name = name;
         this.personalNumber = personalNumber;
         this.orders = orders;
