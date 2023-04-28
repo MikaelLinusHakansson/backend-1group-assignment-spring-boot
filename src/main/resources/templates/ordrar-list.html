@@ -18,6 +18,12 @@
 <div class="container">
 
     <h3>Ordrar Directory</h3>
+    <div class="container">
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <!-- Rest of the code -->
+    </div>
     <hr>
     <a th:href="@{/ordrar/thymeleaf/showFormForAdd}" class="btn btn-primary btn-sm mb-3">
         Add Order

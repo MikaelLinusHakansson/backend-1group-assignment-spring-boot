@@ -22,7 +22,7 @@ public class Customer {
     private String name;
     private String personalNumber;
 
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "customer")
     @JsonIgnore
     private Ordrar orders;
 

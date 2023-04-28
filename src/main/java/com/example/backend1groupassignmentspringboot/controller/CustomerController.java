@@ -6,6 +6,7 @@ import com.example.backend1groupassignmentspringboot.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -33,8 +34,15 @@ public class CustomerController {
     }
 
     @GetMapping("/delete")
-    public String delete(@RequestParam("customerId") Long theId) {
-        customerService.deleteById(theId);
+    public String delete(@RequestParam("customerId") Long theId, RedirectAttributes redirectAttributes) {
+        try {
+            customerService.deleteById(theId);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "The customer has been successfully deleted");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "An error occurred while deleting the customer");
+        }
         return "redirect:/customer/list";
     }
 
@@ -47,9 +55,9 @@ public class CustomerController {
     }
 
     @GetMapping("/showFormForUpdate")
-    public String showFormForUpdate(@RequestParam("customerId") Long id, Model theModel){
+    public String showFormForUpdate(@RequestParam("customerId") Long id, Model theModel) {
         Customer theCustomer = customerService.findById(id);
-        if(theCustomer == null) {
+        if (theCustomer == null) {
             throw new RuntimeException("Customer id not found: " + id);
         }
         theModel.addAttribute("customer", theCustomer);

@@ -6,9 +6,11 @@ import com.example.backend1groupassignmentspringboot.entity.Varor;
 import com.example.backend1groupassignmentspringboot.service.CustomerService;
 import com.example.backend1groupassignmentspringboot.service.OrdrarService;
 import com.example.backend1groupassignmentspringboot.service.VarorService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -34,9 +36,15 @@ public class OrdrarController {
     }
 
     @GetMapping("/showFormForAdd")
-    public String showFormForAdd(Model theModel) {
+    public String showFormForAdd(Model theModel, RedirectAttributes redirectAttributes) {
         Ordrar theOrdrar = new Ordrar();
         theModel.addAttribute("ordrar", theOrdrar);
+        try {
+            // code to retrieve necessary data
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while retrieving data: " + e.getMessage());
+            return "redirect:/ordrar/thymeleaf/list";
+        }
         return "ordrar-form";
     }
 
@@ -63,25 +71,33 @@ public class OrdrarController {
                             @RequestParam("customerName") String customerName,
                             @RequestParam("personalNumber") String personalNumber,
                             @RequestParam("name") String productName,
-                            @RequestParam("price") Double productPrice) {
+                            @RequestParam("price") Double productPrice,
+                            RedirectAttributes redirectAttributes) {
 
-        // Create a new Customer and save to the database
-        Customer theCustomer = new Customer();
-        theCustomer.setName(customerName);
-        theCustomer.setPersonalNumber(personalNumber);
-        customerService.save(theCustomer);
+        try {
+            // Create a new Customer and save to the database
+            Customer theCustomer = new Customer();
+            theCustomer.setName(customerName);
+            theCustomer.setPersonalNumber(personalNumber);
+            customerService.save(theCustomer);
 
-        // Create a new Product and save to the database
-        Varor theProduct = new Varor();
-        theProduct.setName(productName);
-        theProduct.setPrice(productPrice);
-        varorService.save(theProduct);
+            // Create a new Product and save to the database
+            Varor theProduct = new Varor();
+            theProduct.setName(productName);
+            theProduct.setPrice(productPrice);
+            varorService.save(theProduct);
 
-        // Add the Customer and Product to the Order and save to the database
-        theOrdrar.setCustomer(theCustomer);
-        theOrdrar.setProducts(theProduct);
-        ordrarService.save(theOrdrar);
+            // Add the Customer and Product to the Order and save to the database
+            theOrdrar.setCustomer(theCustomer);
+            theOrdrar.setProducts(theProduct);
+            ordrarService.save(theOrdrar);
 
-        return "redirect:/ordrar/thymeleaf/list";
+            return "redirect:/ordrar/thymeleaf/list";
+        } catch (DataIntegrityViolationException e) {
+            // Handle duplicate entry errors
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while saving the order. The same product cannot be linked to two different people.");
+            return "redirect:/ordrar/thymeleaf/showFormForAdd";
+        }
     }
+
 }
