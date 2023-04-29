@@ -26,7 +26,7 @@ public class VarorServiceImpl implements VarorService{
     public Varor findById(Long id) {
         Optional<Varor> result = varorRepository.findById(id);
 
-        Varor theVara = null;
+        Varor theVara;
 
         if (result.isPresent()) {
             theVara = result.get();

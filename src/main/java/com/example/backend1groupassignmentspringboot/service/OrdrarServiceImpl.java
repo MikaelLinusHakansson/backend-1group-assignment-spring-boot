@@ -26,7 +26,7 @@ public class OrdrarServiceImpl implements OrdrarService{
     public Ordrar findById(Long id) {
         Optional<Ordrar> result = ordrarRepository.findById(id);
 
-        Ordrar theOrder = null;
+        Ordrar theOrder;
 
         if (result.isPresent()) {
             theOrder = result.get();

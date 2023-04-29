@@ -10,9 +10,9 @@ import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService{
-    @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository) {
 
         this.customerRepository = customerRepository;
@@ -27,7 +27,7 @@ public class CustomerServiceImpl implements CustomerService{
     public Customer findById(Long id) {
         Optional<Customer> result = customerRepository.findById(id);
 
-        Customer theCustomer = null;
+        Customer theCustomer;
 
         if (result.isPresent()) {
             theCustomer = result.get();

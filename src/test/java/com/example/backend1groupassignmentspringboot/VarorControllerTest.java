@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -62,7 +61,7 @@ public class VarorControllerTest {
     }
 
     @Test
-    void getVaraById() throws Exception {
+    void getVaraById() {
         Varor vara1 = new Varor(1L, "Kaffe", 200);
         // Save the order
         Varor savedVara = varorRepository.save(vara1);
@@ -119,7 +118,7 @@ public class VarorControllerTest {
     }
 
     @Test
-    void addNewVara() throws Exception {
+    void addNewVara() {
         Varor varor = new Varor("item1", 10.0);
         varorRepository.save(varor);
 

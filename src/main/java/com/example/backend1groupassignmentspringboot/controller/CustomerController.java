@@ -1,7 +1,6 @@
 package com.example.backend1groupassignmentspringboot.controller;
 
 import com.example.backend1groupassignmentspringboot.entity.Customer;
-import com.example.backend1groupassignmentspringboot.entity.Varor;
 import com.example.backend1groupassignmentspringboot.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

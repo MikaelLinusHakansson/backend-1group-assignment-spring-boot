@@ -4,7 +4,6 @@ package com.example.backend1groupassignmentspringboot;
 import com.example.backend1groupassignmentspringboot.dao.CustomerRepository;
 import com.example.backend1groupassignmentspringboot.dao.OrdrarRepository;
 import com.example.backend1groupassignmentspringboot.entity.Customer;
-import com.example.backend1groupassignmentspringboot.entity.Ordrar;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,20 +41,20 @@ public class CustomerControllerTest {
 
     @BeforeEach
     public void init() {
-        Customer customer1 = new Customer(1L,"Anna", "123456-7890", null);
-        Customer customer2 = new Customer(2L,"Pelle", "234567-8901", null);
+        Customer customer1 = new Customer(1L, "Anna", "123456-7890", null);
+        Customer customer2 = new Customer(2L, "Pelle", "234567-8901", null);
 
 
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer1));
         when(customerRepository.findById(2L)).thenReturn(Optional.of(customer2));
 
-        when(customerRepository.findAll()).thenReturn(Arrays.asList(customer1,customer2));
+        when(customerRepository.findAll()).thenReturn(Arrays.asList(customer1, customer2));
         when(customerRepository.save(customer1)).thenReturn(customer1);
     }
 
     @Test
-    void getCustomerById() throws Exception {
-        Customer customer1 = new Customer(1L,"Anna","123456-7890", null);
+    void getCustomerById() {
+        Customer customer1 = new Customer(1L, "Anna", "123456-7890", null);
         Customer savedCustomer = customerRepository.save(customer1);
         assertEquals(1L, savedCustomer.getId());
     }
@@ -90,9 +89,9 @@ public class CustomerControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String customerJson = objectMapper.writeValueAsString(customer);
 
-        MvcResult result =  mockMvc.perform(MockMvcRequestBuilders.post("/customer/save/body")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(customerJson))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/customer/save/body")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(customerJson))
                 .andExpect(status().isOk())
                 .andReturn();
 
